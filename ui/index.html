@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RNA — Renomeador e Organizador</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="theme-dark">
+    <!-- Removido a barra de título frameless conforme solicitado para corrigir bugs no Windows -->
+
+    <div class="layout-principal">
+        <main class="area-conteudo">
+            <div class="header-conteudo">
+                <div class="header-textos">
+                    <h1>RNA - Renomeador e Organizador de Documentos</h1>
+                    <p>Organize seus documentos em lote extraindo dados do conteúdo.</p>
+                </div>
+                <div class="header-acoes">
+                    <button class="btn-icone" onclick="abrirConfiguracoes()" title="Configurações">&#xE713;</button>
+                    <button class="btn-icone" onclick="toggleTheme()" title="Alternar Tema">&#xE706;</button>
+                </div>
+            </div>
+
+            <div class="card-formulario">
+
+                <div class="campo-grupo">
+                    <label>ORIGEM</label>
+                    <div class="input-com-botao">
+                        <input type="text" id="inputOrigem" placeholder="Pasta com os documentos...">
+                        <button onclick="procurarPasta('inputOrigem')">Procurar</button>
+                    </div>
+                </div>
+
+                <div class="campo-grupo">
+                    <label>DESTINO</label>
+                    <div class="input-com-botao">
+                        <input type="text" id="inputDestino" placeholder="Pasta de saída...">
+                        <button onclick="procurarPasta('inputDestino')">Procurar</button>
+                    </div>
+                </div>
+
+                <div class="info-nota">
+                    <span class="info-icone">&#xE946;</span>
+                    A data de organização será extraída automaticamente do documento (DATA DO EXTRATO ou data ao lado de [Online/Presencial]).
+                </div>
+
+
+            </div>
+
+            <!-- Botão de Iniciar -->
+            <button class="btn-iniciar" id="btnIniciar" onclick="iniciar()">
+                INICIAR PROCESSAMENTO
+            </button>
+
+            <!-- Caixa de Logs -->
+            <div class="caixa-logs" id="logBox">
+                <div class="log-linha">
+                    <span class="log-ts">[00:00:00]</span>
+                    <span class="log-info">Aguardando início...</span>
+                </div>
+            </div>
+
+            <footer class="assinatura">
+                Desenvolvido por Andelison Colares VD Japiim
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- Modal de Configurações -->
+    <div id="modalConfig" class="modal-overlay hidden">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2>Configurações do Motor</h2>
+                <button class="btn-fechar-modal" onclick="fecharConfiguracoes()">&#xE106;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="campo-config">
+                    <label>Formato do Arquivo</label>
+                    <select id="configTipoArquivo">
+                        <option value=".pdf">.PDF</option>
+                        <option value=".jpg">.JPG</option>
+                        <option value=".png">.PNG</option>
+                        <option value=".jpeg">.JPEG</option>
+                    </select>
+                </div>
+
+                <div class="campo-config">
+                    <label>Início do Nome do Arquivo (Filtro do Scanner)</label>
+                    <input type="text" id="configPalavraInicial" placeholder="Ex: Untitled_ ou Scan_">
+                </div>
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-salvar" onclick="fecharConfiguracoes()">Salvar Configurações</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

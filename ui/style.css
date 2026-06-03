@@ -1,0 +1,404 @@
+/* =========================================
+   VARIÁVEIS DE TEMA (CLARO E ESCURO)
+   ========================================= */
+:root {
+    --fonte-padrao: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    --fonte-icones: 'Segoe Fluent Icons', 'Segoe MDL2 Assets', sans-serif;
+    --fonte-mono: 'Consolas', 'Courier New', monospace;
+}
+
+body.theme-light {
+    --fundo-app: #FFFFFF;
+    --fundo-conteudo: #F5F6FA;
+    --fundo-sidebar: #FFFFFF;
+    --borda: #E2E8F0;
+    --texto-primario: #1E293B;
+    --texto-secundario: #64748B;
+    --hover-btn: #F1F5F9;
+    
+    --card-bg: #FFFFFF;
+    --input-bg: #F8FAFC;
+    --input-border: #CBD5E1;
+    --gold: #C8B87A;
+    --gold-hover: #B5A566;
+    --log-bg: #E2E8F0;
+    
+    --modal-overlay: rgba(0, 0, 0, 0.4);
+    --modal-bg: #FFFFFF;
+}
+
+body.theme-dark {
+    --fundo-app: #0F172A; /* bg */
+    --fundo-conteudo: #16161A; /* surface */
+    --fundo-sidebar: #0F172A;
+    --borda: #2A2A2E; /* border */
+    --borda-suave: #222226; /* border_soft */
+    --texto-primario: #E8E6E0; /* text_pri */
+    --texto-secundario: #9A9890; /* text_sec */
+    --hover-btn: #1E1E22; /* surface2 */
+    
+    --card-bg: transparent;
+    --input-bg: #1E1E22;
+    --input-border: #2A2A2E;
+    
+    --gold: #C8B87A;
+    --gold-hover: #A89050;
+    --gold-text: #1A1800;
+    
+    --log-bg: #0A0A0C;
+    --log-ts: #3A3A38;
+    --log-info: #6B9EC8;
+    --log-ok: #7AAA78;
+    --log-warn: #C8A84A;
+    --log-err: #C07070;
+    
+    --modal-overlay: rgba(0, 0, 0, 0.7);
+    --modal-bg: #16161A;
+}
+
+/* =========================================
+   RESET BÁSICO E LAYOUT
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--fonte-padrao);
+    background-color: var(--fundo-app);
+    color: var(--texto-primario);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* =========================================
+   LAYOUT PRINCIPAL
+   ========================================= */
+.layout-principal {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.btn-icone {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    border: 1px solid var(--borda);
+    background: var(--input-bg);
+    color: var(--texto-secundario);
+    font-family: var(--fonte-icones);
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icone:hover {
+    background-color: var(--hover-btn);
+    color: var(--texto-primario);
+    border-color: var(--gold);
+}
+
+/* =========================================
+   ÁREA DE CONTEÚDO E FORMULÁRIOS
+   ========================================= */
+.area-conteudo {
+    flex: 1;
+    background-color: var(--fundo-conteudo);
+    padding: 24px 40px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.header-conteudo {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.header-textos h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--texto-primario);
+}
+
+.header-textos p {
+    font-size: 13px;
+    color: var(--texto-secundario);
+}
+
+.header-acoes {
+    display: flex;
+    gap: 8px;
+}
+
+.card-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.info-nota {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    font-size: 12px;
+    color: var(--texto-secundario);
+    line-height: 1.5;
+}
+
+.info-icone {
+    font-family: var(--fonte-icones);
+    font-size: 16px;
+    color: var(--gold);
+    flex-shrink: 0;
+}
+
+.campo-grupo {
+    display: flex;
+    align-items: center;
+}
+
+.campo-grupo label {
+    width: 80px;
+    font-family: var(--fonte-mono);
+    font-size: 11px;
+    color: var(--texto-secundario);
+    letter-spacing: 0.5px;
+}
+
+.input-com-botao {
+    flex: 1;
+    display: flex;
+    gap: 8px;
+}
+
+.input-com-botao input, .campo-config input, .campo-config select {
+    flex: 1;
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 4px;
+    color: var(--texto-primario);
+    padding: 0 12px;
+    height: 38px;
+    font-size: 13px;
+    font-family: var(--fonte-padrao);
+    outline: none;
+}
+
+.input-com-botao input.font-mono {
+    font-family: var(--fonte-mono);
+    color: var(--gold);
+}
+
+.input-com-botao input:focus, .campo-config input:focus, .campo-config select:focus {
+    border-color: var(--gold);
+}
+
+.input-com-botao button {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--texto-secundario);
+    border-radius: 4px;
+    padding: 0 16px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.input-com-botao button:hover {
+    background-color: var(--hover-btn);
+    color: var(--texto-primario);
+}
+
+/* =========================================
+   BOTÃO DE INICIAR
+   ========================================= */
+.btn-iniciar {
+    background-color: var(--gold);
+    color: var(--gold-text);
+    border: none;
+    border-radius: 8px;
+    height: 48px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+.btn-iniciar:hover {
+    background-color: var(--gold-hover);
+}
+
+.btn-iniciar:disabled {
+    background-color: var(--input-bg);
+    color: var(--texto-secundario);
+    cursor: not-allowed;
+    border: 1px solid var(--input-border);
+}
+
+/* =========================================
+   CAIXA DE LOGS
+   ========================================= */
+.caixa-logs {
+    background-color: var(--log-bg);
+    border: 1px solid var(--borda-suave);
+    border-radius: 8px;
+    padding: 16px;
+    flex: 1;
+    min-height: 150px;
+    overflow-y: auto;
+    font-family: var(--fonte-mono);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.log-linha {
+    margin-bottom: 4px;
+    display: flex;
+    gap: 12px;
+}
+
+.log-ts {
+    color: var(--log-ts);
+    white-space: nowrap;
+}
+
+.log-info { color: var(--log-info); }
+.log-ok   { color: var(--log-ok); }
+.log-warn { color: var(--log-warn); }
+.log-err  { color: var(--log-err); }
+
+/* =========================================
+   MODAL DE CONFIGURAÇÕES
+   ========================================= */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: var(--modal-overlay);
+    backdrop-filter: blur(2px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    opacity: 1;
+    transition: opacity 0.2s;
+}
+
+.modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-box {
+    background-color: var(--modal-bg);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--borda-suave);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.btn-fechar-modal {
+    background: transparent;
+    border: none;
+    color: var(--texto-secundario);
+    font-family: var(--fonte-icones);
+    cursor: pointer;
+    font-size: 12px;
+}
+.btn-fechar-modal:hover { color: var(--texto-primario); }
+
+.modal-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.campo-config {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.campo-config label {
+    font-size: 12px;
+    color: var(--texto-secundario);
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--borda-suave);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-salvar {
+    background-color: var(--hover-btn);
+    color: var(--texto-primario);
+    border: 1px solid var(--borda);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.btn-salvar:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+/* =========================================
+   ASSINATURA
+   ========================================= */
+.assinatura {
+    text-align: center;
+    font-size: 11px;
+    color: var(--texto-secundario);
+    margin-top: 16px;
+    font-family: var(--fonte-mono);
+    letter-spacing: 0.5px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.assinatura:hover {
+    opacity: 1;
+    color: var(--gold);
+}

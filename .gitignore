@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+Projeto_RNA/dist/
+Projeto_RNA/build/
+*.exe
+.env
