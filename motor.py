@@ -205,6 +205,7 @@ class MotorRNA:
             return
 
         arquivos = []
+        arquivos_com_erro = []
         for f in os.listdir(pasta_origem):
             if not f.lower().endswith(tipo_arquivo):
                 continue
@@ -272,15 +273,17 @@ class MotorRNA:
                         f"⚠️ Faltando ({', '.join(motivo)}): "
                         f"{arquivo} — dump salvo"
                     )
+                    arquivos_com_erro.append(arquivo)
 
             except Exception as e:
                 emit_log(f"❌ Erro em '{arquivo}': {e}")
                 self._salvar_log_erro(arquivo)
+                arquivos_com_erro.append(arquivo)
 
         # FASE 2: Mover
         if not arquivos_prontos:
             emit_log("Nenhum arquivo processado completamente para mover.")
-            on_done(True, "Nenhum arquivo processado com sucesso.")
+            on_done(True, "Processo finalizado.", arquivos_com_erro)
             return
 
         try:
@@ -308,7 +311,76 @@ class MotorRNA:
             segundos = int(tempo_decorrido.total_seconds() % 60)
             tempo_str = f"{minutos}m {segundos}s" if minutos > 0 else f"{segundos}s"
 
-            on_done(True, f"Processo finalizado em {tempo_str}! {total} arquivo(s) organizado(s) em pastas por data.")
+            on_done(True, f"Processo finalizado em {tempo_str}! {total} arquivo(s) organizado(s) em pastas por data.", arquivos_com_erro)
         except Exception as e:
             emit_log(f"❌ Erro ao mover arquivos: {e}")
-            on_done(False, f"Erro ao mover: {e}")
+            on_done(False, f"Erro ao mover: {e}", arquivos_com_erro)
+
+    def processar_manual(self, pasta_origem: str, pasta_destino_base: str, dados_manuais: list, on_log, on_done):
+        def emit_log(msg):
+            if any(msg.startswith(p) for p in ["✅", "🚚"]):
+                tipo = "ok"
+            elif msg.startswith("⚠️"):
+                tipo = "warn"
+            elif msg.startswith("❌"):
+                tipo = "err"
+            else:
+                tipo = "info"
+            limpa = msg.lstrip("✅🚚⚠️❌🔍ℹ️ ").strip()
+            on_log(tipo, limpa)
+
+        emit_log("ℹ️ Iniciando renomeação manual...")
+        arquivos_prontos = []
+
+        for item in dados_manuais:
+            arquivo = item.get("arquivo_original")
+            cod = item.get("cod")
+            nome = item.get("nome")
+            data_faturamento = item.get("data")
+
+            caminho_origem = os.path.join(pasta_origem, arquivo)
+            if not os.path.exists(caminho_origem):
+                emit_log(f"❌ Arquivo não encontrado: {arquivo}")
+                continue
+
+            # Extensão
+            _, ext = os.path.splitext(arquivo)
+            
+            nome_sugerido = re.sub(
+                r'[\\/*?:"<>|]', "",
+                f"{cod} - {nome}{ext}"
+            )
+
+            data_formatada = data_faturamento.replace("/", ".")
+            
+            try:
+                if arquivo.lower() == nome_sugerido.lower():
+                    arquivos_prontos.append({"nome": arquivo, "data": data_formatada})
+                else:
+                    nome_final = self._nome_unico(pasta_origem, nome_sugerido)
+                    os.rename(caminho_origem, os.path.join(pasta_origem, nome_final))
+                    arquivos_prontos.append({"nome": nome_final, "data": data_formatada})
+                    emit_log(f"✅ Renomeado (Manual): {nome_final}")
+            except Exception as e:
+                emit_log(f"❌ Erro ao renomear '{arquivo}': {e}")
+        
+        # Mover
+        for item in arquivos_prontos:
+            arquivo_nome = item["nome"]
+            arquivo_data = item["data"]
+
+            origem = os.path.join(pasta_origem, arquivo_nome)
+            pasta_destino = os.path.join(pasta_destino_base, arquivo_data)
+            os.makedirs(pasta_destino, exist_ok=True)
+
+            destino = os.path.join(
+                pasta_destino,
+                self._nome_unico(pasta_destino, arquivo_nome),
+            )
+            try:
+                shutil.move(origem, destino)
+                emit_log(f"🚚 Enviado: {os.path.basename(destino)} -> pasta {arquivo_data}/")
+            except Exception as e:
+                emit_log(f"❌ Erro ao mover '{arquivo_nome}': {e}")
+
+        on_done(True, "Renomeação manual finalizada!")
