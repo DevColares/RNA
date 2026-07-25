@@ -254,3 +254,98 @@ async function finalizarColetaManual() {
         pollInterval = setInterval(pollUpdates, 500);
     }
 }
+
+// Animação do Pac-Man no Footer
+function iniciarAnimacaoPacman() {
+    const footer = document.querySelector('.assinatura');
+    if (!footer) return;
+    
+    // Adiciona o CSS do Pac-Man se não existir
+    if (!document.getElementById("pacman-style")) {
+        const style = document.createElement("style");
+        style.id = "pacman-style";
+        style.innerHTML = `
+        @keyframes pacman-chomp {
+            0% { clip-path: polygon(100% 74%, 44% 48%, 100% 21%, 100% 0, 0 0, 0 100%, 100% 100%); }
+            50% { clip-path: polygon(100% 50%, 44% 48%, 100% 50%, 100% 0, 0 0, 0 100%, 100% 100%); }
+            100% { clip-path: polygon(100% 74%, 44% 48%, 100% 21%, 100% 0, 0 0, 0 100%, 100% 100%); }
+        }
+        .pacman {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: #fde047; /* amarelo pac-man */
+            animation: pacman-chomp 0.3s infinite;
+        }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    const textoOriginal = "Desenvolvido por Andelison Colares";
+    footer.innerHTML = "";
+    footer.style.display = "flex";
+    footer.style.justifyContent = "center";
+    footer.style.alignItems = "center";
+    
+    const container = document.createElement("div");
+    container.style.position = "relative";
+    container.style.display = "flex";
+    
+    const charSpans = [];
+    for (let i = 0; i < textoOriginal.length; i++) {
+        const span = document.createElement("span");
+        span.innerText = textoOriginal[i] === " " ? "\u00A0" : textoOriginal[i];
+        span.style.transition = "opacity 0.1s";
+        container.appendChild(span);
+        charSpans.push(span);
+    }
+    
+    const pacmanContainer = document.createElement("div");
+    pacmanContainer.style.position = "absolute";
+    pacmanContainer.style.left = "-30px";
+    pacmanContainer.style.top = "50%";
+    pacmanContainer.style.transform = "translateY(-50%)";
+    pacmanContainer.style.transition = "left 0.15s linear";
+    
+    const pacman = document.createElement("div");
+    pacman.className = "pacman";
+    pacmanContainer.appendChild(pacman);
+    
+    container.appendChild(pacmanContainer);
+    footer.appendChild(container);
+    
+    let pos = 0;
+    
+    function step() {
+        if (pos < charSpans.length) {
+            const charSpan = charSpans[pos];
+            pacmanContainer.style.left = charSpan.offsetLeft + "px";
+            
+            // Pac-man come a letra
+            setTimeout(() => {
+                charSpan.style.opacity = "0";
+            }, 80);
+            
+            pos++;
+            setTimeout(step, 150);
+        } else {
+            // Terminou, reseta
+            setTimeout(() => {
+                pacmanContainer.style.transition = "none";
+                pacmanContainer.style.left = "-30px";
+                charSpans.forEach(c => c.style.opacity = "1");
+                pos = 0;
+                
+                setTimeout(() => {
+                    pacmanContainer.style.transition = "left 0.15s linear";
+                    step();
+                }, 100);
+            }, 2000);
+        }
+    }
+    
+    setTimeout(step, 1000);
+}
+
+document.addEventListener("DOMContentLoaded", iniciarAnimacaoPacman);
+

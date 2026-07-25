@@ -5,12 +5,6 @@ import traceback
 import sys
 import subprocess
 from datetime import datetime
-from pdf2image import convert_from_path
-
-# ──────────────────────────────────────────────
-# PASTA SEGURA PARA LOGS (sempre gravável)
-# ──────────────────────────────────────────────
-PASTA_LOGS = os.path.join(os.path.expanduser("~"), "Documents", "RNA_LOGS")
 
 if sys.platform == "win32":
     _Popen_original = subprocess.Popen
@@ -28,6 +22,16 @@ if sys.platform == "win32":
             super().__init__(*args, **kwargs)
 
     subprocess.Popen = _PopenSemJanela  # type: ignore
+
+from pdf2image import convert_from_path
+
+# ──────────────────────────────────────────────
+# PASTA SEGURA PARA LOGS (sempre gravável)
+# ──────────────────────────────────────────────
+PASTA_LOGS = os.path.join(os.path.expanduser("~"), "Documents", "RNA_LOGS")
+
+if sys.platform == "win32":
+    _Popen_original = subprocess.Popen
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PATH_SUPORTE = os.path.join(BASE_DIR, "Projeto_RNA", "bin")

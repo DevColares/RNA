@@ -4,3 +4,7 @@ Projeto_RNA/dist/
 Projeto_RNA/build/
 *.exe
 .env
+
+build/
+dist/
+*.spec
